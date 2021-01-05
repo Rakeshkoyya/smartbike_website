@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<form method="post">
+
+	<div class="row justify-content-center logincard">
+		<div class="col-6 pt-5 pb-5">
+			<div class="card">
+				<div class="card-body">
+					<h2>Registration</h2>
+					<br>
+					<form method="post">
+						{% csrf_token %}
+						{{registration_form.as_p}}
+						<button type="submit" class="btn btn-primary">Register</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</form>
+
+{% endblock content %}

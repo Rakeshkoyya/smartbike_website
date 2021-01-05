@@ -1,0 +1,113 @@
+{% load static %}
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+
+<div class="container">
+	<div class="jumbotron">
+		<div class="card">
+			<div class="card-header">
+				<i class="fas  fa-fingerprint"></i> <b>Fingerprints</b>
+			</div>
+			<div class="card-body">
+				<div>
+					<p id="nodata"></p>
+					<table class="table table-bordered" id="f_table"></table>
+					<button class="btn btn-primary" onclick="addFinger()">Add fingerprint</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div id="modal" class="modal hide-this">
+	<div class="modalrename-content">
+		<div class="modalrename-close">
+			<span><i class="fas fa-times"></i></span>
+		</div>
+		<input class=hide-this type="text" id="hide-key" value="">
+		<input class=hide-this type="text" id="hide-val" value="">
+
+		<div id="modalfm" class="modalfm hide-this">
+			<p>enter the name</p>
+			<form id="change">
+				<input type="text" class="modalrename-input" id="cname" placeholder="fingerprint">
+				<button class="modalrename-sub">change</button>
+			</form>
+		</div>
+
+		<div id="modalfm2" class="modalfm2 hide-this">
+			<p>enter the name</p>
+			<form id="adding">
+				<input type="text" class="modalrename-input" id="aname" placeholder="fingerprint">
+				<button class="modalrename-sub">change</button>
+			</form>
+		</div>
+
+		<div id="modalok" class="modalok hide-this">
+			<img src="{% static 'img/check.gif' %}">
+			<center>
+				<p id="ok_mesg">Success</p>
+				<button class="btn btn-outline-dark btn-md" onclick="modalok()">OK</button>
+			</center>
+		</div>
+
+		<div class="modalrem hide-this" id="modalrem">
+			<i class="fas fa-9x fa-exclamation-circle"></i>
+			<p>are you sure, You want to delete this fingerprint</p>
+			<button class="btn btn-outline-dark btn-md" onclick="modalok()">NO</button>
+			<button class="btn btn-danger btn-md" onclick="deletefp()">DELETE</button>
+		</div>
+
+		<div class="modaltemp hide-this" id="modaltemp">
+			<img src="{% static 'img/loading.gif' %}">
+
+			<p id="resp_mesg">response message</p>
+			<button id="terbtn" class="btn btn-danger btn-md" onclick="terminate()">Terminate</button>
+		</div>
+
+
+	</div>
+
+
+
+</div>
+
+
+
+<p id="opera"></p>
+
+{{ request.user.uniqueID|json_script:"uid" }}
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+
+<script>
+	// Your web app's Firebase configuration
+	// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+	var firebaseConfig = {
+		apiKey: "AIzaSyARWefawopDukiBR8bmuxJB-va46rhtOLI",
+		authDomain: "superbikey.firebaseapp.com",
+		databaseURL: "https://superbikey-default-rtdb.firebaseio.com",
+		projectId: "superbikey",
+		storageBucket: "superbikey.appspot.com",
+		messagingSenderId: "974718385501",
+		appId: "1:974718385501:web:f3e7d6d57ac778e8a77cb4",
+		measurementId: "G-N00J14WJ88"
+	};
+	// Initialize Firebase
+	firebase.initializeApp(firebaseConfig);
+	firebase.analytics();
+</script>
+
+
+<script type="text/javascript" src="{% static 'fingers.js' %}"></script>

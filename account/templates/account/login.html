@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="row justify-content-center logincard">
+	<div class="col-6 pt-5 pb-5">
+		<div class="card">
+			<div class="card-body">
+				<h2>Log in</h2>
+				<form method="post">
+					{% csrf_token %}
+					{{ form.as_p }}
+					<button type="submit" class="btn btn-primary">login</button>
+					<a href="#" class="btn btn-link">Forget your password?</a>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

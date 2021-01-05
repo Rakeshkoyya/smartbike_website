@@ -1,0 +1,68 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css" rel="stylesheet" />
+<style>
+	#map {
+		height: 500px;
+	}
+</style>
+
+
+
+<div id="map"></div>
+{{ request.user.uniqueID|json_script:"uniqueID" }}
+
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1Ijoic21hcnRiaWtlMjQiLCJhIjoiY2tlcmFhMTA2MTA5cjJ0b2VqY3dlYmEwNiJ9.BplkQ_EZ6jBPsmEukHEO9Q';
+	var map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/streets-v11',
+		zoom: 4,
+	});
+
+	var uid = JSON.parse(document.getElementById('uniqueID').textContent);
+
+	var url = 'https://superbikey-default-rtdb.firebaseio.com/' + uid + '/geodata.json';
+	map.on('load', function () {
+
+		var request = new XMLHttpRequest();
+		window.setInterval(function () {
+			// make a GET request to parse the GeoJSON at the url
+			request.open('GET', url, true);
+			request.onload = function () {
+				if (this.status >= 200 && this.status < 400) {
+					// retrieve the JSON from the response
+					var json = JSON.parse(this.response);
+
+					// update the drone symbol's location on the map
+					map.getSource('drone').setData(json);
+
+					// fly the map to the drone's current location
+					map.flyTo({
+						center: json.geometry.coordinates,
+						speed: 1
+					});
+				}
+			};
+			request.send();
+		}, 500);
+
+		map.addSource('drone', { type: 'geojson', data: url });
+		map.addLayer({
+			'id': 'drone',
+			'type': 'symbol',
+			'source': 'drone',
+			'layout': {
+				'icon-image': 'marker-15'
+			}
+		});
+	});
+
+	$('#map').on('shown.bs.modal', function () {
+		map.resize();
+	});
+
+</script>
