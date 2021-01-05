@@ -29,7 +29,8 @@ SECRET_KEY = 'q@i25b1#rz30uto$24u$9iq+%)47$#40syj-h@jl=nlcxu2nmk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.6', 'localhost', '172.16.122.153', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.0.6', 'localhost',
+                 '172.16.122.153', '127.0.0.1', 'smartbike.herokuapp.com']
 
 
 # Application definition
