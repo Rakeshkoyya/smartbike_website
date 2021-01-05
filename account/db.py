@@ -18,12 +18,13 @@ db = firebase.database()
 
 def create_user_data(uid):
     data = {"geometry": {"type": "Point", "coordinates": [
-        144.34052645975987, -42.59638923858063]}, "type": "Feature", "properties": {}}
+        144.34052645, -42.596389]}, "type": "Feature", "properties": {}}
     elock = {'command': '1-0', 'response': '1-0'}
     fp = {'data': {0: 'default'}, 'action': {
         'com': 0, 'id': 0}, 'response': '0-0'}
-    db.child(uid).set({'bike': {'response': '3-0'},
-                       'geodata': data, 'elock': elock, 'fingerprint': fp})
+    db.child(uid).set({'bike': {'response': '3-0'}, 'connection': "", 'isgpsconnected': "",
+                       'geodata': data, 'elock': elock, 'fingerprint': fp,
+                       'profile': {"address": "", "email": "", "ph_num": "", "uname": "", "uniqueID": "", "v_num": ""}})
 
 
 def update_user_data(uid):
