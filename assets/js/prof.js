@@ -1,4 +1,5 @@
 
+
 var uid = JSON.parse(document.getElementById('uid').textContent);
 var fp_prof = firebase.database().ref().child(uid).child('profile');
 fp_prof.on('value', function (datasnap) {

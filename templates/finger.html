@@ -3,7 +3,6 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-
 <div class="container">
 	<div class="jumbotron">
 		<div class="card">
@@ -49,7 +48,9 @@
 		</div>
 
 		<div id="modalok" class="modalok hide-this">
-			<img src="{% static 'img/check.gif' %}">
+			<p class='respimg' id="ok-gif"><img id="resimg" src="{% static 'img/check.gif' %}"></p>
+			<p class='respimg' id="fingerok-gif"><img id="resimg" src="{% static 'img/fingerprintok.gif' %}"></p>
+
 			<center>
 				<p id="ok_mesg">Success</p>
 				<button class="btn btn-outline-dark btn-md" onclick="modalok()">OK</button>
@@ -57,15 +58,17 @@
 		</div>
 
 		<div class="modalrem hide-this" id="modalrem">
-			<i class="fas fa-9x fa-exclamation-circle"></i>
+			<p class='respimg'><img id="resimg" src="{% static 'img/warn.gif' %}"></p>
 			<p>are you sure, You want to delete this fingerprint</p>
 			<button class="btn btn-outline-dark btn-md" onclick="modalok()">NO</button>
 			<button class="btn btn-danger btn-md" onclick="deletefp()">DELETE</button>
 		</div>
 
 		<div class="modaltemp hide-this" id="modaltemp">
-			<img src="{% static 'img/loading.gif' %}">
-
+			<p class='respimg' id="load-gif"><img id="resimg" src="{% static 'img/loading.gif' %}"></p>
+			<p class='respimg' id="place-gif"><img id="resimg" src="{% static 'img/placefinger.gif' %}"></p>
+			<p class='respimg' id="rem-gif"><img id="resimg" src="{% static 'img/warning-blink.gif' %}"></p>
+			<!-- <p class='respimg' id="ok-gif"><img id="resimg" src="{% static 'img/fingerprintok.gif' %}"></p> -->
 			<p id="resp_mesg">response message</p>
 			<button id="terbtn" class="btn btn-danger btn-md" onclick="terminate()">Terminate</button>
 		</div>
@@ -79,7 +82,6 @@
 
 
 
-<p id="opera"></p>
 
 {{ request.user.uniqueID|json_script:"uid" }}
 <!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -110,4 +112,4 @@
 </script>
 
 
-<script type="text/javascript" src="{% static 'fingers.js' %}"></script>
+<script type="text/javascript" src="{% static 'fing.js' %}"></script>

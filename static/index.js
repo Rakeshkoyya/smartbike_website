@@ -8,10 +8,10 @@ var fp_bike = firebase.database().ref().child(uid).child('bike').child('response
 
 fp_bike.on('value', function (datasnap) {
 	if (datasnap.val() == '3-0') {
-		document.getElementById("bikestat").innerText = "Bike Status: locked";
+		document.getElementById("bikestat").innerText = "Bike Status: off";
 	}
 	else if (datasnap.val() == '3-1') {
-		document.getElementById("bikestat").innerText = "Bike Status: unlocked";
+		document.getElementById("bikestat").innerText = "Bike Status: on";
 	}
 })
 
@@ -19,7 +19,7 @@ fp_conn.on('value', function (datasnap) {
 	var d = new Date(datasnap.val());
 	var d2 = new Date();
 
-	if (d2 - d < 3064812612617) {
+	if (d2 - d < 60000) {
 		document.getElementById('devstat').innerText = "Device Status: connected!";
 		document.getElementById("unkn").classList.add("hide-this");
 		document.getElementById("bikestat").classList.remove("hide-this");

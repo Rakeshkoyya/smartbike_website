@@ -1,6 +1,3 @@
-
-window.alert('OfK');
-
 var uid = JSON.parse(document.getElementById('uid').textContent);
 
 var fp_ref = firebase.database().ref().child(uid).child('fingerprint');
@@ -10,6 +7,21 @@ var fp_action = fp_ref.child('action');
 var person;
 var a_com, a_id;
 var data_list = [0]
+
+var isgps = firebase.database().ref().child(uid).child('isgpsconnected');
+
+
+isgps.on('value', (snap) => {
+
+	var val = snap.val();
+	if (val == 'true') {
+		document.getElementById("gpsmesg").innerText = "GPS connected showing live location";
+	}
+	else {
+		document.getElementById("gpsmesg").innerText = "GPS offline, showing last seen";
+	}
+
+})
 
 
 fp_data.on('value', (snapshot) => {
@@ -53,6 +65,7 @@ fp_data.on('value', (snapshot) => {
 // new response------------------
 var fp_res = fp_ref.child("response");
 
+var flg = false;
 fp_res.on('value', function (datasnap) {
 	if (datasnap.val() == 'f-d') {
 		var keyValue = document.getElementById("hide-key").value;
@@ -61,19 +74,22 @@ fp_res.on('value', function (datasnap) {
 		document.getElementById("modalok").classList.remove("hide-this");
 		document.getElementById("modaltemp").classList.add("hide-this");
 		document.getElementById("ok_mesg").innerText = "successfully deleted!";
-		fp_ref.update({ 'action': { 'com': 0, 'id': 0 } });
+		fp_ref.update({ 'action': { 'com': 6, 'id': 2 } });
 	}
 	else if (datasnap.val() == '2-3') {
 		fp_ref.update({ 'action': { 'com': 0, 'id': 0 } });
 		document.getElementById("modaltemp").classList.remove("hide-this");
+		document.getElementById("").innerHTML = '<img src="{% static \'img/placefinger.gif\' %}">';
 		document.getElementById("resp_mesg").innerText = "Place your finger on scanner.";
 	}
 	else if (datasnap.val() == 'r-f') {
 		document.getElementById("modaltemp").classList.remove("hide-this");
+		document.getElementById("").innerHTML = '<img src="{% static \'img/warning-blink.gif\' %}">';
 		document.getElementById("resp_mesg").innerText = "Remove Your finger";
 	}
 	else if (datasnap.val() == '2-3.') {
 		document.getElementById("modaltemp").classList.remove("hide-this");
+		document.getElementById("").innerHTML = '<img src="{% static \'img/placefinger.gif\' %}">';
 		document.getElementById("resp_mesg").innerText = "Again place your finger";
 	}
 	else if (datasnap.val() == '2-7') {
@@ -82,18 +98,32 @@ fp_res.on('value', function (datasnap) {
 	}
 	else if (datasnap.val() == '2-8') {
 		document.getElementById("modaltemp").classList.remove("hide-this");
-		document.getElementById("resp_mesg").innerText = "Fingerprints did not matched. Try Again";
+		document.getElementById("resp_mesg").innerText = "Did not scan properly. Try Again";
 	}
-	else if (datasnap.val() == '2-9') {
-		document.getElementById("modaltemp").classList.add("hide-this");
-		document.getElementById("modalok").classList.remove("hide-this");
-		document.getElementById("ok_mesg").innerText = "successfully registered.";
-	}
+
 	else if (datasnap.val() == 'e-0') {
 		document.getElementById("modaltemp").classList.add("hide-this");
 		document.getElementById("modalok").classList.remove("hide-this");
 		document.getElementById("ok_mesg").innerText = "error occured! try later.";
 	}
+	if (flg) {
+
+		if (datasnap.val() == '2-9') {
+			flg = false;
+			document.getElementById("modaltemp").classList.add("hide-this");
+			var keyVal = document.getElementById("hide-val").value;
+			var key = document.getElementById("hide-key").value;
+			var update = {}
+			update[key] = keyVal;
+
+			fp_ref.child('data').update(update);
+			document.getElementById("modalok").classList.remove("hide-this");
+			document.getElementById("ok_mesg").innerText = "successfully registered.";
+			fp_ref.update({ 'action': { 'com': 6, 'id': 2 } });
+
+		}
+	}
+
 });
 
 
@@ -178,8 +208,6 @@ fp_res.on('value', function (datasnap) {
 
 
 function rename(key) {
-	window.alert(key);
-
 	document.getElementById("hide-key").value = key
 	document.querySelector('.modal')
 		.classList.toggle('hide-this');
@@ -224,8 +252,7 @@ function modalok() {
 }
 
 function remove(key) {
-	window.alert(key);
-	document.getElementById("hide-key").value = key
+	document.getElementById("hide-key").value = key;
 	document.getElementById("terbtn").classList.add("hide-this");
 	document.getElementById("modalrem").classList.remove("hide-this");
 	document.getElementById("modal").classList.remove("hide-this");
@@ -246,6 +273,7 @@ function deletefp() {
 }
 
 function addFinger() {
+	flg = true;
 	document.getElementById("terbtn").classList.remove("hide-this");
 	document.querySelector('.modal')
 		.classList.toggle('hide-this');
@@ -256,7 +284,7 @@ function addFinger() {
 document.querySelector('#adding')
 	.addEventListener('submit', (e) => {
 		e.preventDefault();
-		var nameValue = document.getElementById("aname").value;
+		document.getElementById("hide-val").value = document.getElementById("aname").value;
 
 		// this is O(n) solution for finding the next smallest item, 
 		// got an idea for O(1) implement it later...
@@ -290,3 +318,5 @@ function terminate() {
 	fp_ref.update({ 'action': { 'com': 6, 'id': 1 } });
 	modalok();
 }
+
+

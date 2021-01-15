@@ -3,27 +3,73 @@
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css" rel="stylesheet" />
+
 <style>
 	#map {
 		height: 500px;
 	}
 </style>
 
+<p id='gpsmesg'></p>
 
 
 <div id="map"></div>
+
 {{ request.user.uniqueID|json_script:"uniqueID" }}
 
 
 <script>
+
+
+	var createGeoJSONCircle = function (center, radiusInKm, points) {
+		if (!points) points = 64;
+
+		var coords = {
+			latitude: center[1],
+			longitude: center[0]
+		};
+
+		var km = radiusInKm;
+
+		var ret = [];
+		var distanceX = km / (111.320 * Math.cos(coords.latitude * Math.PI / 180));
+		var distanceY = km / 110.574;
+
+		var theta, x, y;
+		for (var i = 0; i < points; i++) {
+			theta = (i / points) * (2 * Math.PI);
+			x = distanceX * Math.cos(theta);
+			y = distanceY * Math.sin(theta);
+
+			ret.push([coords.longitude + x, coords.latitude + y]);
+		}
+		ret.push(ret[0]);
+
+		return {
+			"type": "geojson",
+			"data": {
+				"type": "FeatureCollection",
+				"features": [{
+					"type": "Feature",
+					"geometry": {
+						"type": "Polygon",
+						"coordinates": [ret]
+					}
+				}]
+			}
+		};
+	};
+
 	mapboxgl.accessToken = 'pk.eyJ1Ijoic21hcnRiaWtlMjQiLCJhIjoiY2tlcmFhMTA2MTA5cjJ0b2VqY3dlYmEwNiJ9.BplkQ_EZ6jBPsmEukHEO9Q';
 	var map = new mapboxgl.Map({
 		container: 'map',
+		center: [80.578906, 16.435921],
 		style: 'mapbox://styles/mapbox/streets-v11',
-		zoom: 4,
+		zoom: 13,
 	});
 
 	var uid = JSON.parse(document.getElementById('uniqueID').textContent);
+	var mark = true;
 
 	var url = 'https://superbikey-default-rtdb.firebaseio.com/' + uid + '/geodata.json';
 	map.on('load', function () {
@@ -40,6 +86,19 @@
 					// update the drone symbol's location on the map
 					map.getSource('drone').setData(json);
 
+					if (mark) {
+						try {
+							mark.remove();
+						}
+						catch {
+							mark = "";
+						}
+					}
+
+					mark = new mapboxgl.Marker()
+						.setLngLat(json.geometry.coordinates)
+						.addTo(map);
+
 					// fly the map to the drone's current location
 					map.flyTo({
 						center: json.geometry.coordinates,
@@ -50,6 +109,8 @@
 			request.send();
 		}, 500);
 
+
+
 		map.addSource('drone', { type: 'geojson', data: url });
 		map.addLayer({
 			'id': 'drone',
@@ -59,10 +120,43 @@
 				'icon-image': 'marker-15'
 			}
 		});
-	});
+	}); /*
+	map.on('load', function () {
+		map.addSource("source_circle_500", {
+			"type": "geojson",
+			"data": {
+				"type": "FeatureCollection",
+				"features": [{
+					"type": "Feature",
+					"geometry": {
+						"type": "Point",
+						"coordinates": [80.578906, 16.435921]
+					}
+				}]
+			}
+		});
 
-	$('#map').on('shown.bs.modal', function () {
+		map.addLayer({
+			"id": "circle500",
+			"type": "circle",
+			"source": "source_circle_500",
+			"paint": {
+				"circle-radius": {
+					stops: [
+						[0, 0],
+						[20, 500]
+					],
+					base: 2
+				},
+				"circle-color": "blue",
+				"circle-opacity": 0.4
+			}
+		});
+	});*/
+
+	$('#map').on('show.bs.modal', function () {
 		map.resize();
 	});
+
 
 </script>

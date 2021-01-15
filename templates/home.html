@@ -26,13 +26,12 @@ Dashboard
 
 		<li class="nav-item">
 			<a id="tab-B" href="#pane-B" class="nav-link active" data-toggle="tab" role="tab"><i
-					class="fas fa-fingerprint"></i> Manage
-				Fingerprints</a>
+					class="fas fa-map-marked-alt"></i> Realtime Location
+			</a>
 		</li>
 		<li class="nav-item">
-			<a id="tab-C" href="#pane-C" class="nav-link" data-toggle="tab" role="tab"><i
-					class="fas fa-map-marked-alt"></i> Realtime
-				Location</a>
+			<a id="tab-C" href="#pane-C" class="nav-link " data-toggle="tab" role="tab"><i
+					class="fas fa-fingerprint"></i> Manage Fingerprints</a>
 		</li>
 		<li class="nav-item">
 			<a id="tab-D" href="#pane-D" class="nav-link" data-toggle="tab" role="tab"><i class="fas fa-key"></i>
@@ -42,35 +41,35 @@ Dashboard
 
 
 	<div id="content" class="tab-content" role="tablist">
-		<div id="pane-B" class="card kards tab-pane fade show active " role="tabpanel" aria-labelledby="tab-B">
+		<div id="pane-B" class="card kards tab-pane fade show active" role="tabpanel" aria-labelledby="tab-B">
 			<div class="card-header kard-header" role="tab" id="heading-B">
 				<h5 class="mb-0">
 					<a class="collapsed" data-toggle="collapse" href="#collapse-B" aria-expanded="false"
 						aria-controls="collapse-B">
-						your Fingerprints
+						Location
 					</a>
 				</h5>
 			</div>
 			<div id="collapse-B" class="collapse" data-parent="#content" role="tabpanel" aria-labelledby="heading-B">
 				<div class="card-body">
-					{% include 'finger.html' %}
+					{%include 'maps.html'%}
 				</div>
 			</div>
 		</div>
 
-		<div id="pane-C" class="card kards tab-pane fade" role="tabpanel" aria-labelledby="tab-C">
+		<div id="pane-C" class="card kards tab-pane fade " role="tabpanel" aria-labelledby="tab-C">
 			<div class="card-header kard-header" role="tab" id="heading-C">
 				<h5 class="mb-0">
 					<a class="collapsed" data-toggle="collapse" href="#collapse-C" aria-expanded="false"
 						aria-controls="collapse-C">
-						location tracking
+						Fingerprints
 					</a>
 				</h5>
 			</div>
 			<div id="collapse-C" class="collapse" role="tabpanel" data-parent="#content" aria-labelledby="heading-C">
 				<div class="card-body">
 					<!-- <a class="btn btn-outline-dark btn-md" href="{% url 'maps' %}">go to Maps</a> -->
-					{%include 'maps.html'%}
+					{% include 'finger.html' %}
 
 				</div>
 			</div>
@@ -81,7 +80,7 @@ Dashboard
 				<h5 class="mb-0">
 					<a class="collapsed" data-toggle="collapse" href="#collapse-D" aria-expanded="false"
 						aria-controls="collapse-D">
-						emergency locking
+						Emergency locking
 					</a>
 				</h5>
 			</div>

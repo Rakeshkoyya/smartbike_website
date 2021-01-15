@@ -10,6 +10,7 @@ var data_list = [0]
 
 var isgps = firebase.database().ref().child(uid).child('isgpsconnected');
 
+window.alert("OJ");
 
 isgps.on('value', (snap) => {
 
@@ -67,6 +68,7 @@ var fp_res = fp_ref.child("response");
 
 var flg = false;
 fp_res.on('value', function (datasnap) {
+	window.alert(datasnap.val());
 	if (datasnap.val() == 'f-d') {
 		var keyValue = document.getElementById("hide-key").value;
 		fp_data.child(keyValue).remove();
@@ -79,17 +81,17 @@ fp_res.on('value', function (datasnap) {
 	else if (datasnap.val() == '2-3') {
 		fp_ref.update({ 'action': { 'com': 0, 'id': 0 } });
 		document.getElementById("modaltemp").classList.remove("hide-this");
-		document.getElementById("").innerHTML = '<img src="{% static \'img/placefinger.gif\' %}">';
+		document.getElementById("respimg").innerHTML = '<img src="{% static \'img/placefinger.gif\' %}">';
 		document.getElementById("resp_mesg").innerText = "Place your finger on scanner.";
 	}
 	else if (datasnap.val() == 'r-f') {
 		document.getElementById("modaltemp").classList.remove("hide-this");
-		document.getElementById("").innerHTML = '<img src="{% static \'img/warning-blink.gif\' %}">';
+		document.getElementById("respimg").innerHTML = '<img src="{% static \'img/warning-blink.gif\' %}">';
 		document.getElementById("resp_mesg").innerText = "Remove Your finger";
 	}
 	else if (datasnap.val() == '2-3.') {
 		document.getElementById("modaltemp").classList.remove("hide-this");
-		document.getElementById("").innerHTML = '<img src="{% static \'img/placefinger.gif\' %}">';
+		document.getElementById("respimg").innerHTML = '<img src="{% static \'img/placefinger.gif\' %}">';
 		document.getElementById("resp_mesg").innerText = "Again place your finger";
 	}
 	else if (datasnap.val() == '2-7') {
