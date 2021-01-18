@@ -10,8 +10,6 @@ var data_list = [0]
 
 var isgps = firebase.database().ref().child(uid).child('isgpsconnected');
 
-window.alert("OJ");
-
 isgps.on('value', (snap) => {
 
 	var val = snap.val();
@@ -68,38 +66,53 @@ var fp_res = fp_ref.child("response");
 
 var flg = false;
 fp_res.on('value', function (datasnap) {
-	window.alert(datasnap.val());
 	if (datasnap.val() == 'f-d') {
 		var keyValue = document.getElementById("hide-key").value;
 		fp_data.child(keyValue).remove();
-
+		hideall();
+		hidegifs();
 		document.getElementById("modalok").classList.remove("hide-this");
-		document.getElementById("modaltemp").classList.add("hide-this");
+		document.getElementById("ok-gif").classList.remove("hide-this");
+
+		// document.getElementById("modaltemp").classList.add("hide-this");
 		document.getElementById("ok_mesg").innerText = "successfully deleted!";
 		fp_ref.update({ 'action': { 'com': 6, 'id': 2 } });
 	}
 	else if (datasnap.val() == '2-3') {
 		fp_ref.update({ 'action': { 'com': 0, 'id': 0 } });
+		hideall();
+		hidegifs();
 		document.getElementById("modaltemp").classList.remove("hide-this");
-		document.getElementById("respimg").innerHTML = '<img src="{% static \'img/placefinger.gif\' %}">';
+		// document.getElementById("respimg").src = 'img/placefinger.gif';
+		document.getElementById("place-gif").classList.remove("hide-this");
 		document.getElementById("resp_mesg").innerText = "Place your finger on scanner.";
 	}
 	else if (datasnap.val() == 'r-f') {
+		hideall();
+		hidegifs();
 		document.getElementById("modaltemp").classList.remove("hide-this");
-		document.getElementById("respimg").innerHTML = '<img src="{% static \'img/warning-blink.gif\' %}">';
+		document.getElementById("rem-gif").classList.remove("hide-this");
 		document.getElementById("resp_mesg").innerText = "Remove Your finger";
 	}
 	else if (datasnap.val() == '2-3.') {
+		hideall();
+		hidegifs();
 		document.getElementById("modaltemp").classList.remove("hide-this");
-		document.getElementById("respimg").innerHTML = '<img src="{% static \'img/placefinger.gif\' %}">';
+		document.getElementById("place-gif").classList.remove("hide-this");
 		document.getElementById("resp_mesg").innerText = "Again place your finger";
 	}
 	else if (datasnap.val() == '2-7') {
+		hideall();
+		hidegifs();
 		document.getElementById("modaltemp").classList.remove("hide-this");
+		document.getElementById("ok-gif").classList.remove("hide-this");
 		document.getElementById("resp_mesg").innerText = "Fingerprints matched.";
 	}
 	else if (datasnap.val() == '2-8') {
+		hideall();
+		hidegifs();
 		document.getElementById("modaltemp").classList.remove("hide-this");
+		document.getElementById("rem-gif").classList.remove("hide-this");
 		document.getElementById("resp_mesg").innerText = "Did not scan properly. Try Again";
 	}
 
@@ -112,7 +125,9 @@ fp_res.on('value', function (datasnap) {
 
 		if (datasnap.val() == '2-9') {
 			flg = false;
-			document.getElementById("modaltemp").classList.add("hide-this");
+			hideall();
+			hidegifs();
+			// document.getElementById("modaltemp").classList.add("hide-this");
 			var keyVal = document.getElementById("hide-val").value;
 			var key = document.getElementById("hide-key").value;
 			var update = {}
@@ -120,6 +135,7 @@ fp_res.on('value', function (datasnap) {
 
 			fp_ref.child('data').update(update);
 			document.getElementById("modalok").classList.remove("hide-this");
+			document.getElementById("fingerok-gif").classList.remove("hide-this");
 			document.getElementById("ok_mesg").innerText = "successfully registered.";
 			fp_ref.update({ 'action': { 'com': 6, 'id': 2 } });
 
@@ -129,87 +145,9 @@ fp_res.on('value', function (datasnap) {
 });
 
 
-// fp_ref.on('value', function (datasnap) {
-// 	datasnap.forEach((childSnapshot) => {
-// 		if (childSnapshot.key == 'data') { return; }
-// 		// window.alert(childSnapshot.key);
-// 		if (childSnapshot.key == 'action') {
-// 			a_com = childSnapshot.child('com').val();
-// 			a_id = childSnapshot.child('id').val();
-// 		}
-// 		if (childSnapshot.key == 'response') {
-// 			if (childSnapshot.val() == '0-0') {
-// 				document.getElementById("opera").innerHTML = "";
-// 			}
-// 			if (a_com == 5) {
-// 				if (childSnapshot.val() == 'f-d') {
-// 					fp_data.child(a_id).remove();
-// 					document.getElementById("opera").innerHTML = "fingerprint removed";
-// 					fp_ref.update({ 'action': { 'com': 6, 'id': 2 } });
-// 				}
-// 				if (childSnapshot.val() == 'e-5') {
-// 					fp_data.child(a_id).remove();
-// 					document.getElementById("opera").innerHTML = "error while deleting";
-// 					fp_ref.update({ 'action': { 'com': 0, 'id': 0 } });
-// 				}
-// 			}
-// 			if (a_com == 4) {
-// 				if (childSnapshot.val() == '2-9') {
-// 					fp_data.child(a_id).set(person);
-// 					document.getElementById("opera").innerHTML = "fingerprint registered successfully";
-// 					fp_ref.update({ 'action': { 'com': 6, 'id': 1 } });
-// 					person = "";
-// 					a_id = 0;
-// 					dic = {};
-// 				}
-// 				if (childSnapshot.val() == '2-3') {
-// 					document.getElementById("opera").innerHTML = "place your finger on scanner";
-// 				}
-// 				if (childSnapshot.val() == '2-4') {
-// 					document.getElementById("opera").innerHTML = "scanned successfully";
-// 				}
-// 				if (childSnapshot.val() == '2-5') {
-// 					document.getElementById("opera").innerHTML = "scan converted";
-// 				}
-// 				if (childSnapshot.val() == '2-6') {
-// 					document.getElementById("opera").innerHTML = "scan is too messy,clean your scanner and Try Again";
-// 				}
-// 				if (childSnapshot.val() == 'r-f') {
-// 					document.getElementById("opera").innerHTML = "remove your finger";
-// 				}
-// 				if (childSnapshot.val() == '2-3.') {
-// 					document.getElementById("opera").innerHTML = "place your finger(2)";
-// 				}
-// 				if (childSnapshot.val() == '2-7') {
-// 					document.getElementById("opera").innerHTML = "prints matched";
-// 				}
-// 				if (childSnapshot.val() == '2-8') {
-// 					document.getElementById("opera").innerHTML = "prints not matched. Try Again";
-// 				}
-// 				if (childSnapshot.val() == 'e-1') {
-// 					document.getElementById("opera").innerHTML = "error in imaging or communication";
-// 				}
-// 				if (childSnapshot.val() == 'e-2') {
-// 					document.getElementById("opera").innerHTML = "error in converting";
-// 				}
-// 				if (childSnapshot.val() == 'e-3') {
-// 					document.getElementById("opera").innerHTML = "error in  modelling";
-// 				}
-// 				if (childSnapshot.val() == 'e-4') {
-// 					document.getElementById("opera").innerHTML = "error in storing";
-// 				}
-// 				if (childSnapshot.val() == 'e-5') {
-// 					document.getElementById("opera").innerHTML = "error while deletion";
-// 				}
-// 			}
-// 		}
-// 	});
-// });
-
-
-
 
 function rename(key) {
+	hideall();
 	document.getElementById("hide-key").value = key
 	document.querySelector('.modal')
 		.classList.toggle('hide-this');
@@ -227,8 +165,11 @@ document.querySelector('#change')
 		var updates = {}
 		updates[keyValue] = nameValue;
 		fp_data.update(updates);
-		document.getElementById("modalfm").classList.add("hide-this")
+		hideall();
+		hidegifs();
+		// document.getElementById("modalfm").classList.add("hide-this")
 		document.getElementById("modalok").classList.remove("hide-this");
+		document.getElementById("ok-gif").classList.remove("hide-this");
 		document.getElementById("ok_mesg").innerText = "Renamed as \"" + nameValue + "\"";
 	});
 
@@ -244,18 +185,20 @@ document.querySelector('.modalrename-close')
 	});
 
 function modalok() {
-	document.getElementById("modalfm").classList.add("hide-this");
-	document.getElementById("modalfm2").classList.add("hide-this");
-	document.getElementById("modalok").classList.add("hide-this");
-	document.getElementById("modalrem").classList.add("hide-this");
-	document.getElementById("modaltemp").classList.add("hide-this");
+	hideall();
+	// document.getElementById("modalfm").classList.add("hide-this");
+	// document.getElementById("modalfm2").classList.add("hide-this");
+	// document.getElementById("modalok").classList.add("hide-this");
+	// document.getElementById("modalrem").classList.add("hide-this");
+	// document.getElementById("modaltemp").classList.add("hide-this");
 	document.querySelector('.modal')
 		.classList.toggle('hide-this');
 }
 
 function remove(key) {
 	document.getElementById("hide-key").value = key;
-	document.getElementById("terbtn").classList.add("hide-this");
+	hideall();
+	// document.getElementById("terbtn").classList.add("hide-this");
 	document.getElementById("modalrem").classList.remove("hide-this");
 	document.getElementById("modal").classList.remove("hide-this");
 
@@ -266,16 +209,18 @@ function deletefp() {
 	var updates = {}
 	updates['action'] = { 'com': 5, 'id': keyValue };
 	fp_ref.update(updates);
-	document.getElementById("modalrem").classList.add("hide-this");
+	hideall();
+	// document.getElementById("modalrem").classList.add("hide-this");
 	document.getElementById("modaltemp").classList.remove("hide-this");
+	hidegifs();
+	document.getElementById("load-gif").classList.remove("hide-this");
 	document.getElementById("resp_mesg").innerText = "processing please wait";
-
-
 
 }
 
 function addFinger() {
 	flg = true;
+	hideall();
 	document.getElementById("terbtn").classList.remove("hide-this");
 	document.querySelector('.modal')
 		.classList.toggle('hide-this');
@@ -313,12 +258,34 @@ document.querySelector('#adding')
 
 		document.getElementById("modalfm2").classList.add("hide-this");
 		document.getElementById("modaltemp").classList.remove("hide-this");
+		hidegifs();
+		document.getElementById("load-gif").classList.remove("hide-this");
 		document.getElementById("resp_mesg").innerText = "processing please wait";
 	});
 
 function terminate() {
 	fp_ref.update({ 'action': { 'com': 6, 'id': 1 } });
 	modalok();
+	hidegifs();
 }
 
+
+function hideall() {
+	document.getElementById("modalok").classList.add("hide-this");
+	document.getElementById("modaltemp").classList.add("hide-this");
+	document.getElementById("modalfm").classList.add("hide-this");
+	document.getElementById("modalfm2").classList.add("hide-this");
+	document.getElementById("modalrem").classList.add("hide-this");
+
+}
+
+
+function hidegifs() {
+	document.getElementById("load-gif").classList.add("hide-this");
+	document.getElementById("place-gif").classList.add("hide-this");
+	document.getElementById("rem-gif").classList.add("hide-this");
+	document.getElementById("ok-gif").classList.add("hide-this");
+	document.getElementById("fingerok-gif").classList.add("hide-this");
+
+}
 

@@ -177,6 +177,12 @@ body {
     justify-content: center;
     padding-top:1em;
   }
+
+  
+.rocker-small {
+  font-size: 0.75em; /* Sizes the switch */
+  margin: 1em;
+}
   
   
   /* Switch starts here */
@@ -191,6 +197,7 @@ body {
     will change the size of the switch.
     See .rocker-small below as example.
     */
+    
     font-size: 1em;
     font-weight: bold;
     text-align: center;

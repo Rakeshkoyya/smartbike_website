@@ -8,10 +8,10 @@ var fp_bike = firebase.database().ref().child(uid).child('bike').child('response
 
 fp_bike.on('value', function (datasnap) {
 	if (datasnap.val() == '3-0') {
-		document.getElementById("bikestat").innerText = "Bike Status: lock";
+		document.getElementById("bikestat").innerText = "Bike Status: off";
 	}
 	else if (datasnap.val() == '3-1') {
-		document.getElementById("bikestat").innerText = "Bike Status: unlock";
+		document.getElementById("bikestat").innerText = "Bike Status: on";
 	}
 })
 
