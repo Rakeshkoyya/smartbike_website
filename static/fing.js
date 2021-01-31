@@ -8,19 +8,6 @@ var person;
 var a_com, a_id;
 var data_list = [0]
 
-var isgps = firebase.database().ref().child(uid).child('isgpsconnected');
-
-isgps.on('value', (snap) => {
-
-	var val = snap.val();
-	if (val == 'true') {
-		document.getElementById("gpsmesg").innerText = "GPS connected showing live location";
-	}
-	else {
-		document.getElementById("gpsmesg").innerText = "GPS offline, showing last seen";
-	}
-
-})
 
 
 fp_data.on('value', (snapshot) => {

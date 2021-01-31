@@ -12,7 +12,9 @@ User = get_user_model()
 
 
 def index(request):
-    return render(request, 'index.html')
+    content = {}
+    content['nbar'] = 'home'
+    return render(request, 'index.html', content)
 
 
 @login_required(login_url='login')
@@ -27,7 +29,7 @@ def home(request):
         content['command'] = 'checked'
 
     content['user'] = User.objects.get(uniqueID=uid)
-
+    content['nbar'] = 'dashboard'
     return render(request, 'home.html', content)
 
 
@@ -43,7 +45,7 @@ def admin_home(request):
     User = get_user_model()
     users = list(User.objects.all())
     # print(users)
-    return render(request, 'admin_home.html', {'us': users})
+    return render(request, 'admin_home.html', {'us': users, 'nbar': 'admin_panel'})
 
 
 def registration_view(request):
@@ -79,7 +81,6 @@ def logout_view(request):
 def login_view(request):
 
     context = {}
-
     user = request.user
     if user.is_authenticated:
         if user.is_admin:
@@ -94,7 +95,6 @@ def login_view(request):
             user = authenticate(uniqueID=uniqueID, password=password)
 
             if user.is_superuser:
-
                 login(request, user)
                 return redirect("admin_home")
 
@@ -106,8 +106,7 @@ def login_view(request):
         form = AccountAuthenticationForm()
 
     context['form'] = form
-
-    # print(form)
+    context['nbar'] = 'login'
     return render(request, "account/login.html", context)
 
 
